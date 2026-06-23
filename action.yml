@@ -8,8 +8,9 @@ branding:
 
 inputs:
   livekit-url:
-    description: "LiveKit server URL the minted tokens should target (e.g. ws://localhost:7880)."
-    required: true
+    description: "LiveKit server URL the minted tokens should target. Defaults to ws://localhost:7880, matching livekit-server --dev mode."
+    required: false
+    default: "ws://localhost:7880"
   api-key:
     description: "LiveKit API key used to sign tokens. Defaults to devkey, matching livekit-server --dev mode."
     required: false

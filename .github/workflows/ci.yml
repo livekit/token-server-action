@@ -42,8 +42,6 @@ jobs:
       - name: Run token server
         id: token_server
         uses: ./
-        with:
-          livekit-url: ws://localhost:7880
       - name: Verify token endpoint
         shell: bash
         run: |

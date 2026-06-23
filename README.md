@@ -8,11 +8,9 @@ Install and run a LiveKit token server for end-to-end testing. The server expose
 
 ```yaml
 - uses: livekit/token-server-action@v1
-  with:
-    livekit-url: ws://localhost:7880
 ```
 
-When paired with [dev-server-action](https://github.com/livekit/dev-server-action), `api-key` and `api-secret` can be omitted — they default to `devkey` and `secret`, matching the credentials used by `livekit-server --dev`.
+When paired with [dev-server-action](https://github.com/livekit/dev-server-action), all inputs can be omitted — they default to the local dev server (`ws://localhost:7880`) and its credentials (`devkey` / `secret`).
 
 Pair with [dev-server-action](https://github.com/livekit/dev-server-action) to stand up a full local LiveKit stack in CI:
 
@@ -25,8 +23,6 @@ Pair with [dev-server-action](https://github.com/livekit/dev-server-action) to s
 - name: Start token server
   id: token_server
   uses: livekit/token-server-action@v1
-  with:
-    livekit-url: ws://localhost:7880
 
 - name: Run integration tests
   env:
@@ -38,7 +34,7 @@ Pair with [dev-server-action](https://github.com/livekit/dev-server-action) to s
 
 | Name           | Required | Default | Description                                                          |
 | -------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `livekit-url`  | Yes      |         | LiveKit server URL the minted tokens should target (e.g. `ws://localhost:7880`). |
+| `livekit-url`  | No       | `ws://localhost:7880` | LiveKit server URL the minted tokens should target. Matches [dev-server-action](https://github.com/livekit/dev-server-action) defaults. |
 | `api-key`      | No       | `devkey` | LiveKit API key used to sign tokens. Matches [dev-server-action](https://github.com/livekit/dev-server-action) defaults. |
 | `api-secret`   | No       | `secret` | LiveKit API secret used to sign tokens. Matches [dev-server-action](https://github.com/livekit/dev-server-action) defaults. |
 | `port`         | No       | `3000`  | Port the token server listens on.                                    |
