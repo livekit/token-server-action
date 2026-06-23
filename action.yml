@@ -11,11 +11,13 @@ inputs:
     description: "LiveKit server URL the minted tokens should target (e.g. ws://localhost:7880)."
     required: true
   api-key:
-    description: "LiveKit API key used to sign tokens."
-    required: true
+    description: "LiveKit API key used to sign tokens. Defaults to devkey, matching livekit-server --dev mode."
+    required: false
+    default: "devkey"
   api-secret:
-    description: "LiveKit API secret used to sign tokens."
-    required: true
+    description: "LiveKit API secret used to sign tokens. Defaults to secret, matching livekit-server --dev mode."
+    required: false
+    default: "secret"
   port:
     description: "Port the token server listens on."
     required: false

@@ -10,9 +10,9 @@ Install and run a LiveKit token server for end-to-end testing. The server expose
 - uses: livekit/token-server-action@v1
   with:
     livekit-url: ws://localhost:7880
-    api-key: devkey
-    api-secret: secret
 ```
+
+When paired with [dev-server-action](https://github.com/livekit/dev-server-action), `api-key` and `api-secret` can be omitted — they default to `devkey` and `secret`, matching the credentials used by `livekit-server --dev`.
 
 Pair with [dev-server-action](https://github.com/livekit/dev-server-action) to stand up a full local LiveKit stack in CI:
 
@@ -27,8 +27,6 @@ Pair with [dev-server-action](https://github.com/livekit/dev-server-action) to s
   uses: livekit/token-server-action@v1
   with:
     livekit-url: ws://localhost:7880
-    api-key: devkey
-    api-secret: secret
 
 - name: Run integration tests
   env:
@@ -41,8 +39,8 @@ Pair with [dev-server-action](https://github.com/livekit/dev-server-action) to s
 | Name           | Required | Default | Description                                                          |
 | -------------- | -------- | ------- | -------------------------------------------------------------------- |
 | `livekit-url`  | Yes      |         | LiveKit server URL the minted tokens should target (e.g. `ws://localhost:7880`). |
-| `api-key`      | Yes      |         | LiveKit API key used to sign tokens.                                 |
-| `api-secret`   | Yes      |         | LiveKit API secret used to sign tokens.                              |
+| `api-key`      | No       | `devkey` | LiveKit API key used to sign tokens. Matches [dev-server-action](https://github.com/livekit/dev-server-action) defaults. |
+| `api-secret`   | No       | `secret` | LiveKit API secret used to sign tokens. Matches [dev-server-action](https://github.com/livekit/dev-server-action) defaults. |
 | `port`         | No       | `3000`  | Port the token server listens on.                                    |
 
 ## Outputs
