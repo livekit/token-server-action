@@ -1,0 +1,59 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule: [cron: 0 0 * * 1]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+        with:
+          version: 9.15.9
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: Build
+        run: pnpm build
+  test:
+    name: Test (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Run token server
+        id: token_server
+        uses: ./
+      - name: Verify token endpoint
+        shell: bash
+        run: |
+          response="$(curl -sf -X POST "${{ steps.token_server.outputs.token-url }}" \
+            -H 'Content-Type: application/json' \
+            -d '{"room_name":"ci-room","participant_identity":"ci-user"}')"
+          echo "$response"
+          echo "$response" | grep -q '"participant_token"'
+          echo "$response" | grep -q '"server_url"'
+      - name: Upload server log
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: token-server-log-${{ matrix.os }}
+          path: ${{ steps.token_server.outputs.log-path }}
+          if-no-files-found: error
